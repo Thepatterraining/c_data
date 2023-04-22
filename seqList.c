@@ -108,14 +108,152 @@ DataType Delete(SeqList *L, int i) {
     return x;
 }
 
-//输出顺序表中元素的函数
-void DisplayList(SeqList L)
-{
-    for(int i = 0; i < L.length; i++)
-    {
-        printf("%d ", L.data[i]);
+//插入排序
+// void InsertSort(SeqList *L, int n) {
+//     int i,j;
+//     for(i = 2; i<=n; i++) {
+//         if (L->data[i] < L->data[i - 1]) {
+//             L->data[0] = L->data[i];
+//             for(j = i-1; L->data[0] < L->data[j]; j--) {
+//                 L->data[j+1] = L->data[j];
+//             }
+//             L->data[j+1]=L->data[0];
+//         }
+//     }
+// }
+
+void ShellSort(SeqList *L, int n) {
+
+}
+
+// 冒泡排序
+void BubbleSort(SeqList *L, int n) {
+    int i,j;
+    for (i = 0; i < n; i++) {
+        for (j = i; j < n; j++) {
+            //判断相邻的两个的大小
+            if (L->data[i] > L->data[j]) {
+                //如果前面的比后面的大，也就是i比j大，那么两个互换，因为从小到大，所以前面的i应该比j小才对
+                int temp = L->data[j];
+                L->data[j] = L->data[i];
+                L->data[i] = temp;
+            }
+        }
     }
-    printf("\n");
+}
+
+//快排
+// SeqList * QuickSort(SeqList *L, int n) {
+//     //递归终止条件，当只有一个的时候直接返回
+//     if (n <= 1) {
+//         return L;
+//     }
+//     //取第一个当中位数
+//     int mid = L->data[0];
+//     SeqList* left, *right, *lsort, *rsort;
+//     InitList(left);
+//     InitList(right);
+//     InitList(lsort);
+//     InitList(rsort);
+//     int i,li,ri;
+//     li = 0;
+//     ri = 0;
+//     //循环一遍，小于的放左边，大于的放右边
+//     for (i = 1; i < n; i++) {
+//         if (L->data[i] >= mid) {
+//             right->data[ri] = L->data[i];
+//             ri++;
+//         } else {
+//             left->data[li] = L->data[i];
+//             li++;
+//         }
+//     }
+
+//     //左右递归
+//     lsort = QuickSort(left, n);
+//     rsort = QuickSort(right, n);
+    
+//     //合并左边，中位数和右边
+    
+// }
+
+// // 查找带头结点数据应该插入的位置
+// int SearchIndex(SeqList *L, DataType x, int len) {
+//     int i;
+//     DataType max = 0;
+//     int maxIndex = len - 1;
+//     printf("插入的有序长度 %d \n", len);
+//     for(i = len - 1; i >= 0; i--) {
+//         printf("查找的数据 %d,L.data %d \n", x, L->data[i]);
+//         if (L->data[i] <= x) {
+//             return i + 1;
+//         }
+//     }
+// }
+
+// // 插入排序
+// void InsertSort(SeqList *L, int n) {
+//     for(int i = 1; i<=n; i++) {
+//         //查找应该插入的位置
+//         int index = SearchIndex(L, L->data[i], i);
+//         printf("%d 应该插入的位置 %d \n", L->data[i], index);
+//         // 插入对应的位置
+//         InsertList(L, index, L->data[i]);
+//         //删除已插入对应位置的元素
+//         Delete(L, i);
+//     }
+// }
+
+int selectMax(SeqList *L, int len) {
+    int i;
+    DataType max = 0;
+    int maxIndex = len - 1;
+    printf("选择的长度 %d \n", len);
+    for(i = len - 1; i >= 0; i--) {
+        printf("当前最大数 %d, 最大数的位置: %d, L.data %d \n", max, maxIndex, L->data[i]);
+        if (L->data[i] >= max) {
+            max = L->data[i];
+            maxIndex = i;
+        }
+    }
+    return maxIndex;
+}
+
+// 选择排序
+void SelectionSort(SeqList *L, int n) {
+    // n是待排序的最后一个下标
+    while (n > 1)
+    {
+        /* code */
+        //查找最大的一个数的位置
+        int maxIndex = selectMax(L, n);
+        printf("选择出的最大数位置 %d \n", maxIndex);
+        //获取最大数
+        DataType max = L->data[maxIndex];
+        printf("最大数 %d \n", max);
+        L->data[maxIndex] = L->data[n - 1];
+        L->data[n - 1] = max;
+        n--;
+    }
+}
+
+// 二分查找
+int BinSearch(SeqList L, DataType x, int n) {
+    int low = 1,mid, high = n;
+    while (low <= high)
+    {
+        /* code */
+        mid = (low + high) / 2;
+        if (L.data[mid] == x) {
+            return mid;
+        }
+        if (L.data[mid] > x) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+    return 0;
 }
 
 int main()
@@ -128,6 +266,8 @@ int main()
     printf("插入后长度 %d \n", ListLength(L));
     InsertList(&L, 1, 5);
     printf("插入后长度 %d \n", ListLength(L));
+    InsertList(&L, 1, 3);
+    printf("插入后长度 %d \n", ListLength(L));
     //获取第1个元素
     printf("第1个元素 %d \n", GetNode(L, 1));
     printf("第2个元素 %d \n", GetNode(L, 2));
@@ -137,8 +277,12 @@ int main()
     printf("5的位置 %d \n", LocateNode(L, 5));
     printf("0的位置 %d \n", LocateNode(L, 0));
     //删除
-    printf("删除5 %d \n", Delete(&L, 1));
+    // printf("删除5 %d \n", Delete(&L, 1));
+    InsertSort(&L, ListLength(L));
     Traverse(L);
+    printf("1的位置 %d \n", BinSearch(L, 1, ListLength(L)));
+    printf("5的位置 %d \n", BinSearch(L, 5, ListLength(L)));
+    printf("3的位置 %d \n", BinSearch(L, 3, ListLength(L)));
     // //向顺序表中添加元素
     // for(int i = 0; i < L.size; i++)
     // {
