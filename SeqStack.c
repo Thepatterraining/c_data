@@ -9,11 +9,7 @@ typedef struct {
 } SeqStack;
 
 // 顺序栈，置空
-void InitList(SeqStack *S) {
-    int i;
-    for(i = 0;i<StackSize; i++) {
-        S->data[i] = 0;
-    }
+void InitStack(SeqStack *S) {
     S->top = -1;
 }
 
@@ -37,10 +33,10 @@ int StackFull(SeqStack *S) {
 void Push(SeqStack *S, DataType x) {
     if (StackFull(S)) {
         printf("满了");
-        exit(0);
+    } else {
+        S->top++;
+        S->data[S->top] = x;
     }
-    S->top++;
-    S->data[S->top] = x;
 }
 
 //出栈
@@ -69,16 +65,16 @@ DataType GetTop(SeqStack *S) {
 
 int main()
 {
-    SeqStack *S;
-    InitList(S);
-    printf("是空的 %d", StackEmpty(S));
-    Push(S, 1);
-    Push(S, 2);
-    Push(S, 3);
-    printf("不是空的 %d", StackEmpty(S));
-    printf("获取栈顶元素 %d", GetTop(S));
-    printf("出栈元素 %d", Pop(S));
-    printf("出栈元素 %d", Pop(S));
-    printf("出栈元素 %d", Pop(S));
-    printf("是空的 %d", StackEmpty(S));
+    SeqStack S;
+    InitStack(&S);
+    printf("是空的 %d", StackEmpty(&S));
+    Push(&S, 1);
+    Push(&S, 2);
+    Push(&S, 3);
+    printf("不是空的 %d", StackEmpty(&S));
+    printf("获取栈顶元素 %d", GetTop(&S));
+    printf("出栈元素 %d", Pop(&S));
+    printf("出栈元素 %d", Pop(&S));
+    printf("出栈元素 %d", Pop(&S));
+    printf("是空的 %d", StackEmpty(&S));
 }

@@ -42,7 +42,7 @@ LinkList CreateListR() {
     head = NULL; //置空单链表
     rear = NULL; 
     scanf("%d", &ch); //读入第一个字符
-    while (ch != '\n') {
+    while (ch != -1) {
         //新建一个数据节点
         p = (ListNode*) malloc(sizeof(ListNode));
         p->data = ch;
@@ -82,7 +82,7 @@ void InitListH(LinkList head) {
     head = (ListNode*) malloc(sizeof(ListNode));
     p = (ListNode*) malloc(sizeof(ListNode));
     p->next = NULL;
-    head->next = p;
+    head = p;
 }
 
 //单链表置空表
@@ -91,8 +91,18 @@ void InitList(LinkList head) {
     head->next = NULL;
 }
 
-//带头结点 遍历 按顺序逐一输出head指向的单链表的所有元素
+//不带头结点 遍历 按顺序逐一输出head指向的单链表的所有元素
 void Traverse(LinkList head) {
+    ListNode *p;
+    p = head;
+    while (p != NULL) {
+        printf("%d \n", p->data);
+        p = p->next;
+    }
+}
+
+//带头结点 遍历 按顺序逐一输出head指向的单链表的所有元素
+void TraverseH(LinkList head) {
     ListNode *p;
     p = head->next;
     while (p != NULL) {
@@ -287,26 +297,107 @@ void BubbleSort(LinkList head) {
     }
 }
 
+// 选择排序 书上的 不带头节点
+void SelectSort(LinkList head) {
+    // 先找最小的和第一个节点交换，再找次小的和第二个节点交换
+    ListNode *p,*r,*s;
+    ListNode q;
+    p = head;
+    // 假设链表不带头节点
+    while (p != NULL)
+    {
+        s = p; // s为当前关键字最小节点地址指针
+        r = p->next;
+        // 像后比较，找关键字最小的节点
+        while (r != NULL)
+        {
+            // 要是r比s小，就s指向r
+            if (r->data < s->data) {
+                s = r;
+            }
+            r = r->next;
+        }
+        // 说明有关键字比s小，交换位置
+        if (s != p) {
+            q = (*p);
+            p->data = s->data;
+            s->data = q.data;
+        }
+        p = p->next;
+    }
+    
+}
+
+// 选择排序 书上的 带头节点的
+LinkList SelectSortH(LinkList head) {
+    // 先找最小的和第一个节点交换，再找次小的和第二个节点交换
+    ListNode *p, *q, *r, *s, *t, *t1;
+    t = NULL; //置空，采用尾插入建立新表
+    while (head != NULL)
+    {
+        s = head; // 假设s指向最小的节点
+        p = head; // q指向p的前驱
+        q = NULL;
+        r = NULL; // r指向s的前驱
+        while (p != NULL)
+        {
+            // 使s指向当前关键字小的节点
+            if (p->data < s->data) {
+                s = p;
+                r = q; // r指向s的前一个
+            }
+            // 指向后继
+            q = p;
+            p = p->next;
+        }
+        // 没发现更小的
+        if (s == head) {
+            // 删除第一个节点
+            head = head->next;
+        } else {
+            // 删除最小节点
+            r->next = s->next;
+        }
+        if (t == NULL) {
+            t = s;
+            t1 = t; //t1指向新表的当前尾巴节点
+        } else {
+            t1->next = s;
+            t1 = s;
+        }
+    }
+    t1->next = NULL;
+    return t;
+}
+
+//希尔排序
+
+//快速排序
+
 int main()
 {
-   LinkList l;
+   LinkList l,l2;
 
-   InitList(l);
+   InitListH(l);
+   InitListH(l2);
    l = CreateListRL();
-   InsertList(l, 1, 1);
-//    InsertList(l, 2, 2);
-//    InsertList(l, 3, 3);
-   Traverse(l);
-   printf("单链表长度 %d \n", getLength(l));
-   DataType x = DeleteList(l,1);
-   printf("删除1的元素 %d \n", x);
-   Traverse(l);
-   printf("单链表长度 %d \n", getLength(l));
+//    SelectSort(l);
+   l2 = SelectSortH(l);
+   Traverse(l2);
+//    InsertList(l, 1, 1);
+// //    InsertList(l, 2, 2);
+// //    InsertList(l, 3, 3);
+//    Traverse(l);
+//    printf("单链表长度 %d \n", getLength(l));
+//    DataType x = DeleteList(l,1);
+//    printf("删除1的元素 %d \n", x);
+//    Traverse(l);
+//    printf("单链表长度 %d \n", getLength(l));
    ListNode *p = GetNodei(l, 2);
    printf("第2个位置的数据 %d \n", p->data);
    ListNode *p2 = GetNodek(l, 2);
    printf("元素2 %d \n", p2->data);
-   BubbleSort(l);
-   printf("排序完成的元素 \n");
-   Traverse(l);
+//    InsertSort(l, getLength(l));
+//    printf("排序完成的元素 \n");
+//    Traverse(l);
 }
